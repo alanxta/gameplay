@@ -1,20 +1,31 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { StatusBar } from 'react-native';
+import * as NavigationBar from 'expo-navigation-bar';
+
+import SignIn from './src/screens/SignIn';
+import Home from './src/screens/Home';
+import Details from './src/screens/Details';
+import Schedule from './src/screens/Schedule';
 
 export default function App() {
+  const [screen, setScreen] = useState('SignIn');
+
+  useEffect(() => {
+    NavigationBar.setVisibilityAsync('hidden');
+  }, []);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <>
+      <StatusBar barStyle="light-content" backgroundColor="#0E1338" />
+      {screen === 'SignIn' && <SignIn onEnter={() => setScreen('Home')} />}
+      {screen === 'Home' && (
+        <Home
+          onOpenDetails={() => setScreen('Details')}
+          onSchedule={() => setScreen('Schedule')}
+        />
+      )}
+      {screen === 'Details' && <Details onBack={() => setScreen('Home')} />}
+      {screen === 'Schedule' && <Schedule onBack={() => setScreen('Home')} />}
+    </>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
